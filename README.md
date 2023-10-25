@@ -5,6 +5,7 @@
 
 ##
 ### REQUIRED: Python 3.9.0 or later
+### Must have following libraries installed: pandas, openpyxl, argparse
 ##
 
 ## About
