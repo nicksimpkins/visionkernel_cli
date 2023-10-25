@@ -24,7 +24,7 @@ Exporting data is made easy with our two export options. `nitroexport` allows fo
 
 ### Converting data -- DONE
 
-Converting data is simple with our `convert` option. Easily convert a file such as .txt, .xml, .json, .csv or .xls into a different supported file type. The convert feature allows for the quick conversion of data into a more readable or preferred type. Synatax is `python visionkernel.py example.csv name_of_new_file.xlxs`.
+Converting data is simple with our `convert` option. Easily convert a file such as .txt, .xml, .json, .csv or .xls into a different supported file type. The convert feature allows for the quick conversion of data into a more readable or preferred type. Synatax is `python main.py convert example.csv name_of_new_file.xlxs`.
 
 ### API implementation
 
