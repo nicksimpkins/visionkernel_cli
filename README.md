@@ -21,9 +21,9 @@ The VisionKernel CLI allows you to connect to a cloud database from your preferr
 
 Exporting data is made easy with our two export options. `nitroexport` allows for the immediate upload of data. If you have reviewed your data, or otherwise want to send it straight to the cloud, you are able to run our nitroexport command to export it immediately. If you are dealing with data that hasn't been reviewed you can run our `smartexport` command which will run a quick scan of the data to look for things such as "N/A" values, blank values and wrong character type values. Smartexport will also look for values that seem to be out of place, and flag them for review. 
 
-### Converting data
+### Converting data -- DONE
 
-Converting data is simple with our `convert` option. Easily convert a file such as .txt, .xml, .json, .csv or .xls into a different supported file type. The convert feature allows for the quick conversion of data into a more readable or preferred type.
+Converting data is simple with our `convert` option. Easily convert a file such as .txt, .xml, .json, .csv or .xls into a different supported file type. The convert feature allows for the quick conversion of data into a more readable or preferred type. Synatax is `python visionkernel.py example.csv name_of_new_file.xlxs`.
 
 ### API implementation
 
