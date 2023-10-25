@@ -1,45 +1,28 @@
 import argparse
-import boto3
 import pandas as pd
-import os
 
-def upload_file_to_s3(bucket_name, local_file_path, s3_file_name):
-    s3 = boto3.client('s3')
-    s3.upload_file(local_file_path, bucket_name, s3_file_name)
+def convert_to_excel(input_file, output_file):
+    try:
+        if input_file.endswith('.csv'):
+            df = pd.read_csv(input_file)
+        elif input_file.endswith('.txt'):
+            df = pd.read_csv(input_file, delimiter='\t')
+        else:
+            raise ValueError("Unsupported input file format. Only .csv and .txt files are supported.")
 
-def convert_text_to_csv_or_excel(input_text, output_file, to_format):
-    if to_format.lower() == 'csv':
-        # Read the text file into a DataFrame and write it as CSV
-        df = pd.read_csv(input_text, sep='\t')  # Adjust the separator if needed
-        df.to_csv(output_file, index=False)
-    elif to_format.lower() == 'xls':
-        # Read the text file into a DataFrame and write it as Excel
-        df = pd.read_csv(input_text, sep='\t')  # Adjust the separator if needed
+        # Write the DataFrame to an Excel file
         df.to_excel(output_file, index=False)
-    else:
-        print("Invalid target format. Supported formats are 'csv' and 'xls'.")
+        print(f"Conversion successful. Excel file saved as {output_file}")
+    except Exception as e:
+        print(f"Conversion failed: {str(e)}")
 
 def main():
-    parser = argparse.ArgumentParser(description="Upload files to AWS S3 and convert text files to CSV or Excel")
-    parser.add_argument("bucket", help="Name of the S3 bucket")
-    parser.add_argument("local_file", help="Local file path (text, CSV, or Excel)")
-    parser.add_argument("s3_file_name", help="Name for the file on S3")
-    parser.add_argument("--convert", help="Convert text file to CSV or Excel and specify the output file format")
-    
+    parser = argparse.ArgumentParser(description="Convert CSV and text files to Excel")
+    parser.add_argument("input_file", help="Input CSV or text file")
+    parser.add_argument("output_file", help="Output Excel file")
     args = parser.parse_args()
 
-    if args.convert:
-        target_format = args.convert.lower()
-        if target_format in ['csv', 'xls']:
-            converted_file = args.local_file.replace('.txt', f'.{target_format}')
-            convert_text_to_csv_or_excel(args.local_file, converted_file, target_format)
-            upload_file_to_s3(args.bucket, converted_file, args.s3_file_name)
-            print(f"Text file converted to {target_format}: {converted_file}")
-        else:
-            print("Invalid target format. Supported formats are 'csv' and 'xls.")
-    else:
-        upload_file_to_s3(args.bucket, args.local_file, args.s3_file_name)
-        print(f"File uploaded to {args.bucket}/{args.s3_file_name}")
+    convert_to_excel(args.input_file, args.output_file)
 
 if __name__ == "__main__":
     main()
