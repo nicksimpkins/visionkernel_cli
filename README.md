@@ -26,6 +26,14 @@ Exporting data is made easy with our two export options. `nitroexport` allows fo
 
 Converting data is simple with our `convert` option. Easily convert a file such as .txt, .xml, .json, .csv or .xls into a different supported file type. The convert feature allows for the quick conversion of data into a more readable or preferred type. Synatax is `python main.py convert example.csv name_of_new_file.xlxs`.
 
+### Connecting Cloud Database
+
+To connect to your cloud database you will need certain information that is unique for every database and every cloud provider. 
+AWS RDS: Instance Identifier, Database Name, Username
+Azure SQL: Server Name, Database Name, Username
+Google Cloud SQL: Instance Connection Name, Database Name, Username
+Google Cloud Storage: Bucket Name
+
 ### API implementation
 
 To add an API, check the "Supported APIs" section in the documentation (check link above). If the API you want to access is supported, all you have to do is run the `visionkernel install datafeed API_goes_here`. This will prompt the user for the API key and then import the libraries and save the API to your system.
