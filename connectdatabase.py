@@ -74,3 +74,27 @@ def create_table_postgresql(connection, table_name, column_definitions):
 
     except Exception as e:
         print(f"An error occurred: {e}")
+
+def create_table_azure_sql(connection, table_name, column_definitions):
+    try:
+        cursor = connection.cursor()
+        create_table_query = f"CREATE TABLE {table_name} ({column_definitions})"
+        cursor.execute(create_table_query)
+        connection.commit()
+        print(f"Table '{table_name}' created successfully in Azure SQL Database!")
+
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        return None
+    
+def create_table_gcloud_sql(connection, table_name, column_definitions):
+    try:
+        cursor = connection.cursor()
+        create_table_query = f"CREATE TABLE {table_name} ({column_definitions})"
+        cursor.execute(create_table_query)
+        connection.commit()
+        print(f"Table '{table_name}' created successfully in Google Cloud SQL Database!")
+
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        return None
