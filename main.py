@@ -1,7 +1,7 @@
 import argparse
 import getpass
 from convert import convert_to_excel
-from connectdatabase import connect_to_aws_rds, connect_to_azure_sql, connect_to_google_cloud_sql, connect_to_google_cloud_storage
+from connectdatabase import connect_to_aws_rds, connect_to_azure_sql, connect_to_google_cloud_sql, connect_to_google_cloud_storage, create_table_postgresql
 
 def main():
     parser = argparse.ArgumentParser(description="Database Connection and CSV/Text to Excel Converter")
@@ -81,7 +81,7 @@ def main():
 
             if args.database_endpoint:
                 connection = connect_to_aws_rds(args.database_endpoint, args.database_name, args.username, password)
-                create_table_function = create_table_in_postgresql
+                create_table_function = create_table_postgresql
             elif args.server_name:
                 connection = connect_to_azure_sql(args.server_name, args.database_name, args.username, password)
                 # Add function for Azure SQL if needed
