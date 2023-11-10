@@ -17,8 +17,11 @@ def main():
     # Subparser for AWS RDS database connection
     aws_db_parser = subparsers.add_parser('aws', help="Connect to AWS RDS Database")
     aws_db_parser.add_argument("--database-endpoint", help="AWS RDS database instance identifier")
-    aws_db_parser.add_argument("--database-name", help="Name of the database")
+    aws_db_parser.add_argument("--database-name", help="Database Name")
+    aws_db_parser.add_argument("--port", help="Port Number")
     aws_db_parser.add_argument("--username", help="Database username")
+    aws_db_parser.add_argument("--password", help="Database password")
+    
 
     # Subparser for Azure SQL database connection
     azure_db_parser = subparsers.add_parser('azure', help="Connect to Azure SQL Database")
@@ -42,11 +45,13 @@ def main():
         convert_to_excel(args.input_file, args.output_file)
     elif args.action == 'aws':
         # AWS RDS database connection
+        database_name = args.database_name or input("Enter database name: ")
         database_endpoint = args.database_endpoint or input("Enter the AWS RDS database instance identifier: ")
-        database_name = args.database_name or input("Enter the name of the database: ")
         username = args.username or input("Enter the database username: ")
-        password = getpass.getpass("Enter the database password: ")
-        connection = connect_to_aws_rds(database_endpoint, database_name, username, password)
+        password = args.password or input("Enter the database password: ")
+        port = args.port or input("Enter port: ")
+
+        connection = connect_to_aws_rds(database_name, username, password, database_endpoint, port)
         # Perform database operations using the 'connection' object
 
     elif args.action == 'azure':

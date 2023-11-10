@@ -3,18 +3,15 @@ import psycopg2
 import pyodbc
 from google.cloud import storage
 
-def connect_to_aws_rds(database_endpoint, database_name, username, password):
+def connect_to_aws_rds(database_name, username, password, database_endpoint, port):
     try:
-        rds = boto3.client('rds')
-        db_instance = rds.describe_db_instances(DBInstanceIdentifier=database_endpoint)
-        endpoint = db_instance['DBInstances'][0]['Endpoint']['Address']
 
         conn = psycopg2.connect(
             database=database_name,
             user=username,
             password=password,
-            host=endpoint,
-            port=5432  # Change the port if needed
+            host=database_endpoint,
+            port=int(port),
         )
 
         print("Connected to the AWS RDS database successfully!")
