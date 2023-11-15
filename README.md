@@ -26,7 +26,7 @@ Exporting data is made easy with our two export options. `nitroexport` allows fo
 
 Converting data is simple with our `convert` option. Easily convert a file such as .txt, .xml, .json, .csv or .xls into a different supported file type. The convert feature allows for the quick conversion of data into a more readable or preferred type. Synatax is `python main.py convert example.csv name_of_new_file.xlxs`.
 
-### Connecting Cloud Database
+### Connecting Cloud Database -- DONE
 
 To connect to your cloud database you will need certain information that is unique for every database and every cloud provider. 
 AWS RDS: Instance Identifier, Database Name, Username
@@ -44,5 +44,5 @@ To add a service for charting, graphing, data analysis or any other reason check
 
 ### Thank you!
 
-Thank you for downloading the VisionKernel CLI! If you have comments or suggestions feel free to reach out at support@visionkernel.com as we would love to hear from you. Please reach out if you have an API or service you would like added to VisionKernel, we will do our best to add support for it in a timely manner.
+Thank you for downloading the VisionKernel CLI! If you have comments or suggestions feel free to reach out at visionkernel@gmail.com as we would love to hear from you. Please reach out if you have an API or service you would like added to VisionKernel, we will do our best to add support for it in a timely manner.
 
