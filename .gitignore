@@ -51,3 +51,4 @@ docs/_build/
 
 # Virtual Enviroment - Project Specific
 visionenv/
+venv/
