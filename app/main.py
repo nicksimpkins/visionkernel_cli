@@ -2,8 +2,12 @@ import argparse
 import getpass
 from convert import convert_to_excel
 from connectdatabase import connect_to_aws_rds, connect_to_azure_sql, connect_to_google_cloud_sql, connect_to_google_cloud_storage, create_table_postgresql, create_table_azure_sql, create_table_gcloud_sql
+from createtable import create_custom_table, list_tables
+
 
 def main():
+    connection = None
+
     parser = argparse.ArgumentParser(description="Database Connection and CSV/Text to Excel Converter")
 
     # Add subparsers for different actions
@@ -21,7 +25,17 @@ def main():
     aws_db_parser.add_argument("--port", help="Port Number")
     aws_db_parser.add_argument("--username", help="Database username")
     aws_db_parser.add_argument("--password", help="Database password")
-    
+
+    # Add subparser for AWS function
+    aws_db_subparsers = aws_db_parser.add_subparsers(dest='aws_action', help='AWS action to perform')
+
+    # Create database via AWS RDS
+    create_aws_db_parser = aws_db_subparsers.add_parser('newdatabase', help="Create a new database in AWS RDS")
+    create_aws_db_parser.add_argument("--new-database-name", help="Name of the new database to create")
+
+    # Create table via AWS RDS database
+    create_aws_table_parser = aws_db_subparsers.add_parser('createtable', help="Create a new table in AWS RDS")
+    create_aws_table_parser.add_argument("--table-name", help="Name of the new table to create")
 
     # Subparser for Azure SQL database connection
     azure_db_parser = subparsers.add_parser('azure', help="Connect to Azure SQL Database")
@@ -41,6 +55,7 @@ def main():
 
     args = parser.parse_args()
 
+
     if args.action == 'convert':
         convert_to_excel(args.input_file, args.output_file)
     elif args.action == 'aws':
@@ -53,6 +68,19 @@ def main():
 
         connection = connect_to_aws_rds(database_name, username, password, database_endpoint, port)
         # Perform database operations using the 'connection' object
+
+        existing_tables = list_tables(connection)
+        print("Existing tables:", existing_tables)
+
+        create_table_response = input("Create new table? y/n: ")
+
+        if create_table_response == "y":
+            # Prompt the user for the table name
+            table_name = input("Enter the name of the table you want to create: ")
+
+            # Create the custom table
+            create_custom_table(connection, table_name)
+        connection.close()
 
     elif args.action == 'azure':
         # Azure SQL database connection
@@ -100,3 +128,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
