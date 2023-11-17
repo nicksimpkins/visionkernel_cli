@@ -7,6 +7,7 @@ from psycopg2.extensions import register_adapter, AsIs
 register_adapter(np.int64, AsIs)
 register_adapter(np.float64, AsIs)
 
+
 def upload_excel_data(connection, table_name, excel_file_path):
     try:
         # Read Excel file into a Pandas DataFrame
@@ -33,3 +34,5 @@ def upload_excel_data(connection, table_name, excel_file_path):
 
     except Exception as e:
         print(f"Error uploading data: {e}")
+
+    # this is og code

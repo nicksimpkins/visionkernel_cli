@@ -5,9 +5,9 @@ def create_custom_table(connection, table_name):
             # Adjust the SQL statement based on your table schema
             table_creation_sql = f"""
                 CREATE TABLE IF NOT EXISTS {table_name} (
-                    id SERIAL PRIMARY KEY,
+                    id VARCHAR(255) PRIMARY KEY,
                     column1 VARCHAR(255),
-                    column2 INT
+                    column2 VARCHAR(255)
                     -- Add more columns as needed
                 );
             """
