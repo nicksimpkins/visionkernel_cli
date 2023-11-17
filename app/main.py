@@ -1,8 +1,11 @@
+import os
 import argparse
 import getpass
 from convert import convert_to_excel
 from connectdatabase import connect_to_aws_rds, connect_to_azure_sql, connect_to_google_cloud_sql, connect_to_google_cloud_storage, create_table_postgresql, create_table_azure_sql, create_table_gcloud_sql
+from createdatabase import create_database
 from createtable import create_custom_table, list_tables
+from uploaddata import upload_excel_data
 
 
 def main():
@@ -72,7 +75,7 @@ def main():
         existing_tables = list_tables(connection)
         print("Existing tables:", existing_tables)
 
-        create_table_response = input("Create new table? y/n: ")
+        create_table_response = input("Create new table? y/n: ").lower()
 
         if create_table_response == "y":
             # Prompt the user for the table name
@@ -80,6 +83,17 @@ def main():
 
             # Create the custom table
             create_custom_table(connection, table_name)
+
+            # Upload data from Excel file
+            upload_data_response = input("Do you want to upload data from an Excel file? (y/n): ").lower()
+
+            if upload_data_response == "y":
+                excel_file_path = input("Enter the path to the Excel file: ")
+
+                # Upload data to the created table
+                upload_excel_data(connection, table_name, excel_file_path)
+
+
         connection.close()
 
     elif args.action == 'azure':
