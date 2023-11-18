@@ -1,17 +1,14 @@
 # VisionKernel CLI
 ### V 1.0.0 LTS
 ### VisionKernel Corp.
-### www.visionkernel.com/visionkernel-cli/v1/documentation
+### https://nicksimpkins.github.io/visionkernel_cli/
 
-##
 ### REQUIRED: Python 3.9.0 or later
-### Must have following libraries installed: pandas, openpyxl, argparse
-##
+
 
 ## About
 
-VisionKernel is a data management tool tailored for the financial industry. That being said, the VisionKernel CLI can make it easier than ever to work with your data.
-
+VisionKernel is a data management and analysis tool that allows easy access to cloud databases. Say goodbye to using excel for data management. This open-source CLI tool allows for the rapid processing and analysis of all your data, and makes it easy to upload your excel files into your cloud databases.
 
 ### Getting Started
 
@@ -20,19 +17,17 @@ The VisionKernel CLI allows you to connect to a cloud database from your preferr
 
 ### Exporting data
 
-Exporting data is made easy with our two export options. `nitroexport` allows for the immediate upload of data. If you have reviewed your data, or otherwise want to send it straight to the cloud, you are able to run our nitroexport command to export it immediately. If you are dealing with data that hasn't been reviewed you can run our `smartexport` command which will run a quick scan of the data to look for things such as "N/A" values, blank values and wrong character type values. Smartexport will also look for values that seem to be out of place, and flag them for review. 
+To export data, simply connect to the database and select which Excel files you want to upload. If files are in CSV format, use our conversion tool to convert to Excel before upload. Our program also allows for the creation of tables in your cloud database from the command line.
 
 ### Converting data -- DONE
 
 Converting data is simple with our `convert` option. Easily convert a file such as .txt, .xml, .json, .csv or .xls into a different supported file type. The convert feature allows for the quick conversion of data into a more readable or preferred type. Synatax is `python main.py convert example.csv name_of_new_file.xlxs`.
 
-### Connecting Cloud Database -- DONE
+### Connecting Cloud Database -- DONE (AWS Support)
 
-To connect to your cloud database you will need certain information that is unique for every database and every cloud provider. 
-AWS RDS: Instance Identifier, Database Name, Username
-Azure SQL: Server Name, Database Name, Username
-Google Cloud SQL: Instance Connection Name, Database Name, Username
-Google Cloud Storage: Bucket Name
+To connect to your cloud database you will need certain information that is unique for every database and every cloud provider. We currently offer AWS support; to connect to a cloud database run `python main.py aws` and follow the prompts.
+AWS RDS: Instance Identifier, Database Name, Username, Password, Port
+
 
 ### API implementation
 
