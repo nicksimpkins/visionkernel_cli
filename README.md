@@ -5,8 +5,13 @@
 
 ### REQUIRED: Python 3.9.0 or later
 
+<div align="center">
 ![GitHub Repo stars](https://img.shields.io/github/stars/nicksimpkins/visionkernel_cli)
-
+![GitHub forks](https://img.shields.io/github/forks/nicksimpkins/visionkernel_cli)
+![GitHub watchers](https://img.shields.io/github/watchers/nicksimpkins/visionkernel_cli)
+![GitHub License](https://img.shields.io/github/license/nicksimpkins/visionkernel_cli)
+![GitHub issues](https://img.shields.io/github/issues/nicksimpkins/visionkernel_cli)
+</div>
 
 ## About
 
