@@ -75,7 +75,12 @@ def main():
         existing_tables = list_tables(connection)
         print("Existing tables:", existing_tables)
 
-        create_table_response = input("Create new table? y/n: ").lower()
+
+        # DEV - 01
+
+        excel_file_path = input("Enter the path to the Excel file: ")
+
+        create_table_response = input("Create new table? (y/n): ").lower()
 
         if create_table_response == "y":
             # Prompt the user for the table name
@@ -88,11 +93,18 @@ def main():
             upload_data_response = input("Do you want to upload data from an Excel file? (y/n): ").lower()
 
             if upload_data_response == "y":
-                excel_file_path = input("Enter the path to the Excel file: ")
-
                 # Upload data to the created table
                 upload_excel_data(connection, table_name, excel_file_path)
+        else:
+            # Ask the user which existing table to use
+            table_name = input("Enter the name of the existing table you want to use: ")
 
+            # Example: Insert data into the existing table
+            insert_data_response = input("Do you want to insert data into the existing table? (y/n): ").lower()
+
+            if insert_data_response == "y":
+                # Insert data into the existing table
+                upload_excel_data(connection, table_name, excel_file_path)
 
         connection.close()
 
