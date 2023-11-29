@@ -5,7 +5,7 @@ from convert import convert_to_excel
 from connectdatabase import connect_to_aws_rds, connect_to_azure_sql, connect_to_google_cloud_sql, connect_to_google_cloud_storage, create_table_postgresql, create_table_azure_sql, create_table_gcloud_sql
 from createdatabase import create_database
 from createtable import create_custom_table, list_tables
-from uploaddata import upload_excel_data
+from uploaddata import upload_excel_data, auto_create_table_from_excel
 
 
 def main():
@@ -62,7 +62,7 @@ def main():
     if args.action == 'convert':
         convert_to_excel(args.input_file, args.output_file)
     elif args.action == 'aws':
-        # AWS RDS database connection
+        # AWS RDS database connection setup
         database_name = args.database_name or input("Enter database name: ")
         database_endpoint = args.database_endpoint or input("Enter the AWS RDS database instance identifier: ")
         username = args.username or input("Enter the database username: ")
@@ -70,41 +70,30 @@ def main():
         port = args.port or input("Enter port: ")
 
         connection = connect_to_aws_rds(database_name, username, password, database_endpoint, port)
-        # Perform database operations using the 'connection' object
 
         existing_tables = list_tables(connection)
         print("Existing tables:", existing_tables)
 
+        if connection:
+            upload_data_response = input("Would you like to upload data from an excel file? (y/n): ").lower()
 
-        # DEV - 01
+            if upload_data_response == 'y':
+                excel_file_path = input("Enter the path to the excel file: ")
+                sheet_name = input("Enter the name of the sheet to upload: ")
 
-        excel_file_path = input("Enter the path to the Excel file: ")
+                create_table_response = input("Would you like to create a new table? (y/n): ").lower()
 
-        create_table_response = input("Create new table? (y/n): ").lower()
+                if create_table_response == 'y':
+                    table_name = input("Enter the name of the new table: ")
+                    auto_create_table_from_excel(connection, table_name, excel_file_path, sheet_name)
+                else:
+                    table_name = input("Enter the name of the table to upload to: ")
 
-        if create_table_response == "y":
-            # Prompt the user for the table name
-            table_name = input("Enter the name of the table you want to create: ")
+                upload_excel_data(connection, table_name, excel_file_path, sheet_name)
 
-            # Create the custom table
-            create_custom_table(connection, table_name)
+                connection.close()
 
-            # Upload data from Excel file
-            upload_data_response = input("Do you want to upload data from an Excel file? (y/n): ").lower()
-
-            if upload_data_response == "y":
-                # Upload data to the created table
-                upload_excel_data(connection, table_name, excel_file_path)
-        else:
-            # Ask the user which existing table to use
-            table_name = input("Enter the name of the existing table you want to use: ")
-
-            # Example: Insert data into the existing table
-            insert_data_response = input("Do you want to insert data into the existing table? (y/n): ").lower()
-
-            if insert_data_response == "y":
-                # Insert data into the existing table
-                upload_excel_data(connection, table_name, excel_file_path)
+        # ... similar structure for 'azure' and 'gcp' ...
 
         connection.close()
 
@@ -154,4 +143,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
