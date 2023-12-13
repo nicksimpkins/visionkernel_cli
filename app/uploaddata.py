@@ -14,7 +14,7 @@ def get_postgresql_data_type(pandas_dtype):
     else:
         return 'VARCHAR'  # Default to VARCHAR for other types
 
-def auto_create_table_from_excel(connection, table_name, excel_file_path, sheet_name=None):
+def auto_create_table_from_excel(connection, table_name, excel_file_path, sheet_name):
     try:
         # Read Excel file into a Pandas DataFrame
         df = pd.read_excel(excel_file_path, sheet_name=sheet_name)
@@ -44,13 +44,13 @@ def auto_create_table_from_excel(connection, table_name, excel_file_path, sheet_
         print(f"Error creating table: {e}")
 
 
-def upload_excel_data(connection, table_name, excel_file_path, sheet_name=None):
+def upload_excel_data(connection, table_name, excel_file_path, sheet_name):
     try:
         # Read Excel file into a Pandas DataFrame
         df = pd.read_excel(excel_file_path, sheet_name=sheet_name)
 
         # Format column names (convert to lowercase) and create SQL statement
-        formatted_columns = [f'"{col.lower()}"' for col in df.columns]
+        formatted_columns = [f'"{str(col).lower()}"' for col in df.columns]
         columns = ', '.join(formatted_columns)
         placeholders = ', '.join(['%s'] * len(df.columns))
         insert_query = f"INSERT INTO {table_name} ({columns}) VALUES ({placeholders});"
