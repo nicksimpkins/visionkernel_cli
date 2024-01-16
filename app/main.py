@@ -94,7 +94,6 @@ def main():
 
         # ... similar structure for 'azure' and 'gcp' ...
 
-        connection.close()
 
     elif args.action == 'azure':
         # Azure SQL database connection

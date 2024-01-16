@@ -1,6 +1,15 @@
 # Import necessary libraries
 import pandas as pd
 import mysql.connector
+from contextlib import contextmanager
+
+@contextmanager
+def mysql_cursor(connection):
+    cursor = connection.cursor()
+    try:
+        yield cursor
+    finally:
+        cursor.close()
 
 # Function to map pandas data types to MySQL data types
 def get_mysql_data_type(pandas_dtype):
@@ -37,7 +46,7 @@ def auto_create_table_from_excel(connection, table_name, excel_file_path, sheet_
         create_table_sql += ', '.join(column_definitions) + ");"
 
         # Execute the SQL statement to create a new table
-        with connection.cursor() as cursor:
+        with mysql_cursor(connection) as cursor:
             cursor.execute(create_table_sql)
             connection.commit()
 
@@ -64,7 +73,7 @@ def upload_excel_data(connection, table_name, excel_file_path, sheet_name):
         # Create a list of tuples from the DataFrame
         records = [tuple(row) for row in df.to_records(index=False)]
 
-        with connection.cursor() as cursor:
+        with mysql_cursor(connection) as cursor:
             # Execute the SQL query for insertion
             cursor.executemany(insert_query, records)
 
