@@ -60,6 +60,8 @@ def main():
 
     if args.action == 'convert':
         convert_to_excel(args.input_file, args.output_file)
+    # ...
+
     elif args.action == 'aws':
         # AWS RDS database connection setup
         database_name = args.database_name or input("Enter database name: ")
@@ -71,7 +73,8 @@ def main():
         connection = connect_to_aws_rds(database_name, username, password, database_endpoint, port)
 
         existing_tables = list_tables(connection)
-        print("Existing tables:", existing_tables)
+        decoded_table_names = [table_name.decode('utf-8') for table_name in existing_tables]
+        print("Existing tables:", decoded_table_names)
 
         if connection:
             upload_data_response = input("Would you like to upload data from an excel file? (y/n): ").lower()
@@ -93,6 +96,7 @@ def main():
                 connection.close()
 
         # ... similar structure for 'azure' and 'gcp' ...
+
 
 
     elif args.action == 'azure':

@@ -2,6 +2,7 @@
 import pandas as pd
 import mysql.connector
 from contextlib import contextmanager
+from decimal import Decimal
 
 @contextmanager
 def mysql_cursor(connection):
@@ -56,17 +57,32 @@ def auto_create_table_from_excel(connection, table_name, excel_file_path, sheet_
         print(f"Error creating table: {e}")
 
 # Function to upload data from an Excel file to a MySQL table
+
 def upload_excel_data(connection, table_name, excel_file_path, sheet_name):
     try:
         # Read Excel file into a Pandas DataFrame
         df = pd.read_excel(excel_file_path, sheet_name=sheet_name)
 
-        # Convert NaN values to None
+        # Convert data types for each column based on mapping
+        for col in df.columns:
+            col_type = get_mysql_data_type(df[col].dtype)
+            if col_type == 'DATETIME':
+                df[col] = pd.to_datetime(df[col]).dt.strftime('%Y-%m-%d')
+            elif col_type == 'INT':
+                # Ensure numeric columns are formatted correctly (optional, as pandas usually handles this well)
+                df[col] = df[col].apply(lambda x: round(x) if col_type == 'INT' else float(x))
+            elif col_type == 'FLOAT':
+                df[col] = df[col].apply(lambda x: None if pd.isna(x) else Decimal(str(x)))
+            elif col_type == 'BOOLEAN':
+                # Convert boolean to a format MySQL understands (1 for True, 0 for False)
+                df[col] = df[col].astype(int)
+            # Additional data types can be handled here as needed
+
+        # Convert NaN values to None for SQL compatibility
         df = df.where(pd.notna(df), None)
 
-        # Format column names (convert to lowercase) and create SQL statement
-        formatted_columns = [f'"{col.lower()}"' for col in df.columns]
-        columns = ', '.join(formatted_columns)
+        # Format column names and create SQL statement
+        columns = ', '.join([f'`{col}`' for col in df.columns])
         placeholders = ', '.join(['%s'] * len(df.columns))
         insert_query = f"INSERT INTO {table_name} ({columns}) VALUES ({placeholders});"
 
@@ -75,12 +91,12 @@ def upload_excel_data(connection, table_name, excel_file_path, sheet_name):
 
         with mysql_cursor(connection) as cursor:
             # Execute the SQL query for insertion
+            print("Insert Query:", insert_query)
+            print("Sample Records:", records[:5])  # Print first 5 records as a sample
             cursor.executemany(insert_query, records)
+            connection.commit()
 
-        # Commit the transaction
-        connection.commit()
-
-        print(f"Data uploaded successfully to table '{table_name}'!")
+        print(f"Data uploaded successfully to '{table_name}'.")
 
     except Exception as e:
         print(f"Error uploading data: {e}")

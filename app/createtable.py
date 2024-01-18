@@ -16,11 +16,10 @@ def create_custom_table(connection, table_name):
         with mysql_cursor(connection) as cursor:
             # SQL statement to create a table with specified name if it doesn't exist
             # The table has three columns: id (primary key), column1, and column2
-            # All columns are of type VARCHAR(255)
+            # All columns are of type VARCHAR(255) unless otherwise specified
             table_creation_sql = f"""
                 CREATE TABLE IF NOT EXISTS {table_name} (
-                    id VARCHAR(255) PRIMARY KEY,
-                    column1 VARCHAR(255),
+                    column1 VARCHAR(255) PRIMARY KEY,
                     column2 VARCHAR(255)
                     -- Add more columns as needed
                 );
