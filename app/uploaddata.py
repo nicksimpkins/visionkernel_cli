@@ -39,7 +39,7 @@ def auto_create_table_from_excel(connection, table_name, excel_file_path, sheet_
         column_definitions = []
         for col in df.columns:
             # Format column name for SQL (replace spaces, etc.)
-            formatted_col = col.replace(" ", "_").lower()
+            formatted_col = str(col).replace(" ", "_").lower()
             col_data_type = get_mysql_data_type(df[col].dtype)
             column_definitions.append(f"{formatted_col} {col_data_type}")
 
@@ -62,6 +62,9 @@ def upload_excel_data(connection, table_name, excel_file_path, sheet_name):
     try:
         # Read Excel file into a Pandas DataFrame
         df = pd.read_excel(excel_file_path, sheet_name=sheet_name)
+
+        # Remove rows where all elements are NaN (blank lines)
+        df = df.dropna(how='all')
 
         # Convert data types for each column based on mapping
         for col in df.columns:
